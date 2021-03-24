@@ -8,3 +8,4 @@ The contents of this repository are from a lightning talk titled “Using XPath 
 * Presentation slides:
   * [LibreOffice ODF](./slides.odf)
   * [PDF](./slides.pdf)
+* [Sample XQuery](./example.xq)
