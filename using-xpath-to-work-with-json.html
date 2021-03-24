@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <title>Using XPath 3.1 (and its friends) to work with JSON</title>
+    <style>
+      body {
+        display: inline-flex;
+        flex-direction: column;
+        font-family: Verdana, sans-serif;
+        font-size: 1.2em;
+        margin-bottom: 3em;
+        padding: 0 3em;
+      }
+      code {
+        font-size: 1.25em;
+      }
+      h2 {
+        margin: 3em 0 0;
+      }
+      li {
+        margin: 0.5em 0;
+      }
+      p {
+        margin: 2em 0 0;
+      }
+      pre {
+        border-left: 1em solid #AAA;
+        padding-left: 1em;
+        margin-left: 0.5em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Using XPath 3.1 (and its friends) to work with JSON</h1>
+    <p>Before I get started, my script for this talk is available in a <a href="https://github.com/amclark42/code4lib_xpath-to-work-with-json">GitHub repository</a>.</p>
+    <p>My name is Ash Clark and my pronouns are e, em, eir. My job is XML Applications Developer for the Northeastern University Digital Scholarship Group and for the Northeastern Women Writers Project.</p>
+    <p>What I do is: I turn Text Encoding Initiative XML documents into APIs and web interfaces. To support these, I write RESTXQ applications which are served out of XML databases (eXist-DB and BaseX). I work heavily with XQuery, a scripting language that extends the functionality of XPath. I also work with XSLT, CSS. And reluctantly: Javascript.</p>
+    <p>Lots of people prefer to get JSON responses from APIs. I like XML better, but I want my APIs to support both, especially because I’m working in the Digital Humanities. There’s no one tool or programming language that the field is guaranteed to be comfortable with. And each API I make could be someone’s first.</p>
+    <p>I warmed to JSON when I realized there was actually a good deal of overlap between JSON and XML:</p>
+    <ul>
+      <li>one “root”,</li>
+      <li>hierarchy,</li>
+      <li>meaningful groupings, and</li>
+      <li>common formats for data interchange.</li>
+    </ul>
+    <p>(But I’ll never recommend JSON for marking up documents. Use XML or use HTML!)</p>
+    <p>Enter XPath and XQuery 3.1, and XSLT 3.0! The W3C recommendations were published in 2017. The functionality is available in Saxon processors, and the eXist-DB and BaseX databases.</p>
+    <p>Crucially, the new versions integrate support for working with JSON! They introduce new complex data structures: <em>maps</em>, which are key-value pairs; and <em>arrays</em>, ordered groupings of values. Both of these can nest, unlike the standard sequences. And both can accept any type of value, including XML nodes and the new inline functions! I’ve been working with maps and arrays for most of my time at Northeastern, and I love them. So much.</p>
+    <p>Here’s an example of both:</p>
+<pre><code>map {
+    "greeting": "Hello",
+    "who": [
+        "World",
+        &lt;orgName&gt;Code4Lib 2021&lt;/orgName&gt;,
+        $attendees-from-Northeastern
+      ]
+  }
+</code></pre>
+    <p>This is a map with two keys, "greeting" and "who". The value of "greeting" is a string "hello", and the value of "who" is a three-item array consisting of a string, an XML element node, and whatever’s in the variable <code>$attendees-from-Northeastern</code>.</p>
+    <p>You can access data in maps and arrays with functions or with terse lookup operators.</p>
+<pre><code>map:get($myMap, "greeting")
+  eq  $myMap("greeting")
+  eq  $myMap?greeting
+  
+array:get($myArray, 1)
+  eq  $myArray(1)
+  eq  $myArray?1
+</code></pre>
+    <p>These are two expressions which test alternate ways of getting at the values in <code>$myMap</code> and <code>$myArray</code>. Both should return <code>true()</code>, since the accessors are equivalent.</p>
+    <p>You can qualify the results you expect, as you can with XPath expressions:</p>
+<pre><code>$myMap[?greeting eq "Hello"]
+  
+$myArray[?*[. eq "World"]]
+</code></pre>
+    <p>In the first expression, we want to return <code>$myMap</code>, but only if the key "greeting" has the string value "Hello". In the second, we want to get <code>$myArray</code>, but only if one of its values is the string "World".</p>
+    <p>Excitingly, the new XPath, XQuery, and XSLT can convert JSON strings or files into maps and arrays. They can <em>also</em> serialize maps and arrays back to JSON. <em>And</em> they can convert JSON to XML, and vice versa! (With the caveat that the equivalent XML must follow a W3C-defined schema.)</p>
+    <p>Some takeaways from my use of maps and arrays:</p>
+    <ul>
+      <li>Key-value pairs are <em>great</em> for mapping parameter names onto human-readable labels!</li>
+      <li>The nesting of arrays means I can do complex ordering of values.
+        <ul>
+          <li>For example, I can have an outer array corresponding to a sort order, and inner ones corresponding to a secondary sort order.</li>
+        </ul>
+      </li>
+      <li>I can cache the XML representation of JSON in my XML database, which gives me indexing and quick query results.</li>
+      <li>I can create RESTXQ APIs which return XML or JSON on request (or HTML, after applying an XSL transformation).</li>
+      <li>I can pass maps around instead of creating XQuery functions with oodles of required parameters.</li>
+    </ul>
+    <p>I don’t have time to give detailed examples of my own work, but feel free to start up a conversation in the Code4Lib Slack! I’m super enthusiastic about these new features. Come geek out with me!</p>
+    
+    <h2>Links and references:</h2>
+    <ul>
+      <li><a href="https://dsg.northeastern.edu/">Northeastern University Digital Scholarship Group</a>
+        <ul>
+          <li><a href="https://github.com/NEU-DSG">GitHub organization</a></li>
+          <li><a href="https://wwp.northeastern.edu/">Women Writers Project</a></li>
+        </ul>
+      </li>
+      <li><a href="https://tei-c.org/">Text Encoding Initiative (TEI)</a></li>
+      <li><a href="https://www.saxonica.com/welcome/welcome.xml">Saxon processors</a></li>
+      <li><a href="http://exist-db.org/exist/apps/homepage/index.html">eXist-DB XML database</a></li>
+      <li><a href="https://basex.org/">BaseX XML database</a></li>
+      <li><a href="http://exquery.github.io/exquery/exquery-restxq-specification/restxq-1.0-specification.html">RESTXQ</a> (XQuery annotations for defining API endpoints)
+        <ul>
+          <li>The <a href="https://docs.basex.org/wiki/RESTXQ">BaseX documentation</a> is <em>fantastic</em></li>
+        </ul>
+      </li>
+      <li><a href="https://www.w3.org/TR/xpath-31/#id-maps-and-arrays">“Maps and Arrays”</a>, XPath and XQuery 3.1 W3C recommendation</li>
+      <li><a href="https://www.w3.org/TR/xslt-xquery-serialization-31/#json-output">“JSON Output Method”</a>, XSLT and XQuery Serialization 3.1 W3C recommendation</li>
+      <li><a href="https://www.w3.org/TR/xpath-functions-31/#json">“Conversion to and from JSON”</a>, XPath and XQuery Functions and Operators 3.1 W3C recommendation
+        <ul>
+          <li><a href="https://www.w3.org/TR/xpath-functions-31/#schema-for-json">“Schema for the result of <code>fn:json-to-xml</code>”</a></li>
+        </ul>
+      </li>
+      <li><a href="https://www.oreilly.com/library/view/xquery-2nd-edition/9781491915080/">The second edition of <em>XQuery</em></a> by Priscilla Walmsley has a whole chapter on maps, arrays, and JSON</li>
+    </ul>
+    
+  </body></html>

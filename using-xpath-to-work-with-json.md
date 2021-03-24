@@ -54,7 +54,7 @@ $myMap[?greeting eq "Hello"]
 
 $myArray[?*[. eq "World"]]
 ```
-In the first expression, we want to return `$myMap`, but only if the key "greeting" has the string value "Hello". In the second, we want to get $myArray, but only if one of its values is the string "World".
+In the first expression, we want to return `$myMap`, but only if the key "greeting" has the string value "Hello". In the second, we want to get `$myArray`, but only if one of its values is the string "World".
 
 Excitingly, the new XPath, XQuery, and XSLT can convert JSON strings or files into maps and arrays. They can *also* serialize maps and arrays back to JSON. *And* they can convert JSON to XML, and vice versa! (With the caveat that the equivalent XML must follow a W3C-defined schema.)
 

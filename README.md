@@ -1,7 +1,10 @@
 # About
 
-The contents of this repository include the resources for a lightning talk at the Code4Lib 2021 conference, “Using XPath 3.1 (and its friends) to work with JSON”.
+The contents of this repository are from a lightning talk titled “Using XPath 3.1 (and its friends) to work with JSON”, presented at [Code4Lib 2021](https://2021.code4lib.org).
 
-* [Script](./using-xpath-to-work-with-json.md), which includes text used in the presentation slides
-* [Slides in LibreOffice ODF format](./slides.odf)
-* [Slides in PDF format](./slides.pdf)
+* Script, which includes the text used in the slides:
+  * [Markdown](./using-xpath-to-work-with-json.md)
+  * [HTML](./using-xpath-to-work-with-json.html)
+* Presentation slides:
+  * [LibreOffice ODF](./slides.odf)
+  * [PDF](./slides.pdf)
