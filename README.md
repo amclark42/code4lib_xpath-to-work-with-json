@@ -1,4 +1,4 @@
-# About this repository
+# About
 
 The contents of this repository include the resources for a lightning talk at the Code4Lib 2021 conference, “Using XPath 3.1 (and its friends) to work with JSON”.
 
