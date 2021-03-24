@@ -61,11 +61,11 @@
     <p>You can access data in maps and arrays with functions or with terse lookup operators.</p>
 <pre><code>map:get($myMap, "greeting")
   eq  $myMap("greeting")
-  eq  $myMap?greeting
+  (: and these `eq  $myMap?greeting` :)
   
 array:get($myArray, 1)
   eq  $myArray(1)
-  eq  $myArray?1
+  (: and these `eq  $myArray?1` :)
 </code></pre>
     <p>These are two expressions which test alternate ways of getting at the values in <code>$myMap</code> and <code>$myArray</code>. Both should return <code>true()</code>, since the accessors are equivalent.</p>
     <p>You can qualify the results you expect, as you can with XPath expressions:</p>
