@@ -40,11 +40,11 @@ You can access data in maps and arrays with functions or with terse lookup opera
 ```
 map:get($myMap, "greeting")
   eq  $myMap("greeting")
-  eq  $myMap?greeting
+  (: and these `eq  $myMap?greeting` :)
 
 array:get($myArray, 1)
   eq  $myArray(1)
-  eq  $myArray?1
+  (: and these `eq  $myArray?1` :)
 ```
 These are two expressions which test alternate ways of getting at the values in `$myMap` and `$myArray`. Both should return `true()`, since the accessors are equivalent.
 
